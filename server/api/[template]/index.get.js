@@ -29,12 +29,14 @@ async function preloadFont() {
   return font
 }
 
-export default defineEventHandler(async (req) => {
 
-  const { text = 'hello' } = getQuery(req)
 
-  const imageResponse = await new ImageResponse(
-    html`
+export default defineEventHandler(async (event) => {
+
+  const { text = 'hello' } = getQuery(event)
+
+  const templates = {
+    center: html`
       <div class="flex items-center p-8">
         <img width="400" src="https://chromatone.center/media/logo/click-logo.png" />
         <div class="flex text-2xl p-4">
@@ -44,7 +46,13 @@ export default defineEventHandler(async (req) => {
         ${text}
         </div>
       </div>
-    `,
+    `
+  }
+
+  const { template = 'center' } = event.context.params
+
+  const imageResponse = await new ImageResponse(
+    templates[template] || templates.center,
     {
       width: 1200,
       height: 600,
@@ -59,7 +67,7 @@ export default defineEventHandler(async (req) => {
     }
   )
 
-  setHeader(req, 'Content-Type', 'image/png')
+  setHeader(event, 'Content-Type', 'image/png')
 
   return imageResponse
 }
