@@ -30,18 +30,30 @@ async function preloadFont() {
 }
 
 
-
 export default defineEventHandler(async (event) => {
 
   const { text = 'hello' } = getQuery(event)
 
   const templates = {
     center: html`
-      <div class="flex items-center p-8">
-        <img width="400" src="https://chromatone.center/media/logo/click-logo.png" />
-        <div class="flex text-2xl p-4">
+      <div class="flex bg-gray-100 items-center h-full p-8">
+        <img width="300" class="p-4" src="https://chromatone.center/media/logo/click-logo.png" />
+        <div class="flex flex-col px-2">
+          <div class="flex text-120px font-bold">
+          Chromatone
+          </div> 
+          <div class="flex text-80px">
+          ${text}
+          </div>
+        </div>
+      </div>
+    `,
+    simple: html`
+      <div class="flex flex-col items-center p-8">
+       
+        <div class="flex text-5xl p-4">
         Chromatone
-        </div> 
+        </div>
         <div class="flex text-2xl p-4">
         ${text}
         </div>
@@ -59,9 +71,15 @@ export default defineEventHandler(async (event) => {
       fonts: [
         {
           name: 'Commissioner',
-          data: await preloadFont(),
+          data: await fetchFont(`../../public/fonts/Commissioner-Regular.ttf`),
           weight: 400,
           style: 'normal',
+        },
+        {
+          name: 'Commissioner',
+          data: await fetchFont(`../../public/fonts/Commissioner-Bold.ttf`),
+          weight: 800,
+          style: 'bold',
         },
       ],
     }
